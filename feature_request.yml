@@ -1,0 +1,33 @@
+name: Feature request
+description: Propose a MealWise feature or capstone requirement.
+title: "[FEATURE] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: User need / problem
+      description: What should a MealWise user be able to do?
+      placeholder: As a user, I want to...
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: List the observable conditions that mean this feature is complete.
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: true
+  - type: dropdown
+    id: owner
+    attributes:
+      label: Proposed owner
+      options:
+        - You
+        - Classmate
+        - Both
+    validations:
+      required: true

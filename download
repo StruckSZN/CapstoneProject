@@ -1,0 +1,11 @@
+.vs/
+**/bin/
+**/obj/
+*.user
+*.suo
+# Local credentials or machine-specific settings
+appsettings.local.json
+*.mdf
+*.ldf
+*.db
+secrets.json
