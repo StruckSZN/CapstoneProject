@@ -70,3 +70,4 @@ Do not run schema creation against an existing populated database.
 - Include a concise summary, testing steps, and screenshots for UI changes.
 - Request review from the other student.
 - Do not commit credentials, connection passwords, build output, or local database files.
+\n\n## Database validation\n\n- `05_VerifyDatabase.sql` checks required schema objects and seeded reference data without changing records.\n- `06_SmokeTest.sql` performs transactional create/read/update/delete checks across recipe, meal-plan, and grocery-list relationships, then rolls back its test data. Run both against a fresh disposable database after scripts 00–02.\n
