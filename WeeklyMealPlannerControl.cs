@@ -160,7 +160,11 @@ public sealed class WeeklyMealPlannerControl : UserControl
                 FROM dbo.MealPlanEntries e
                 JOIN dbo.MealTypes mt ON mt.MealTypeId=e.MealTypeId
                 JOIN dbo.Recipes r ON r.RecipeId=e.RecipeId
-                WHERE e.MealPlanId=@PlanId ORDER BY e.PlannedDate, mt.SortOrder;
+                JOIN dbo.MealPlans p ON p.MealPlanId=e.MealPlanId
+                WHERE e.MealPlanId=@PlanId
+                  AND e.PlannedDate >= p.WeekStartDate
+                  AND e.PlannedDate < DATEADD(day, 7, p.WeekStartDate)
+                ORDER BY e.PlannedDate, mt.SortOrder;
                 """, connection);
             cmd.Parameters.Add("@PlanId", SqlDbType.Int).Value = id;
             var table = new DataTable(); await using var reader = await cmd.ExecuteReaderAsync(); table.Load(reader);
@@ -170,6 +174,28 @@ public sealed class WeeklyMealPlannerControl : UserControl
         catch (Exception ex) { MessageBox.Show(ex.Message, "Could not load plan entries", MessageBoxButtons.OK, MessageBoxIcon.Error); }
     }
 
+
+    private static async Task<bool> IsDateWithinPlanWeekAsync(SqlConnection connection, int planId, DateTime selectedDate)
+    {
+        await using var cmd = new SqlCommand("SELECT WeekStartDate FROM dbo.MealPlans WHERE MealPlanId=@PlanId;", connection);
+        cmd.Parameters.Add("@PlanId", SqlDbType.Int).Value = planId;
+        var value = await cmd.ExecuteScalarAsync();
+        if (value is null or DBNull)
+        {
+            MessageBox.Show("The selected meal plan no longer exists. Refresh the plan list.");
+            return false;
+        }
+
+        var weekStart = Convert.ToDateTime(value).Date;
+        if (selectedDate.Date < weekStart || selectedDate.Date >= weekStart.AddDays(7))
+        {
+            MessageBox.Show($"Choose a date between {weekStart:d} and {weekStart.AddDays(6):d} for this meal plan.",
+                "Date outside selected week", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return false;
+        }
+        return true;
+    }
+
     private async Task AddEntryAsync()
     {
         if (_plans.SelectedValue is not int planId || _recipes.SelectedValue is not int recipeId || _mealTypes.SelectedValue is not int mealId)
@@ -177,6 +203,7 @@ public sealed class WeeklyMealPlannerControl : UserControl
         try
         {
             await using var connection = _database.CreateConnection(); await connection.OpenAsync();
+            if (!await IsDateWithinPlanWeekAsync(connection, planId, _date.Value.Date)) return;
             await using var cmd = new SqlCommand("""
                 INSERT dbo.MealPlanEntries (MealPlanId, RecipeId, MealTypeId, PlannedDate, Servings)
                 VALUES (@PlanId,@RecipeId,@MealId,@Date,@Servings);
@@ -209,6 +236,7 @@ public sealed class WeeklyMealPlannerControl : UserControl
         {
             await using var connection = _database.CreateConnection();
             await connection.OpenAsync();
+            if (!await IsDateWithinPlanWeekAsync(connection, planId, _date.Value.Date)) return;
             await using var cmd = new SqlCommand("""
                 UPDATE dbo.MealPlanEntries
                 SET RecipeId=@RecipeId, MealTypeId=@MealId, PlannedDate=@Date, Servings=@Servings
