@@ -25,7 +25,8 @@ public sealed class GroceryListControl : UserControl
         top.Controls.Add(new Label { Text = "Meal plan", AutoSize = true, Padding = new Padding(0, 9, 0, 0) });
         top.Controls.Add(_plans);
         top.Controls.Add(ModuleUi.Button("Generate / update items", async () => await GenerateAsync()));
-        top.Controls.Add(ModuleUi.Button("Add item", async () => await AddItemAsync()));\n        top.Controls.Add(ModuleUi.Button("Edit selected", async () => await EditItemAsync()));
+        top.Controls.Add(ModuleUi.Button("Add item", async () => await AddItemAsync()));
+        top.Controls.Add(ModuleUi.Button("Edit selected", async () => await EditItemAsync()));
         top.Controls.Add(ModuleUi.Button("Delete selected", async () => await DeleteItemAsync()));
         _plans.SelectedIndexChanged += async (_, _) => await LoadListAsync();
         Controls.Add(top);
