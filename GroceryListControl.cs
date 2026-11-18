@@ -159,6 +159,28 @@ public sealed class GroceryListControl : UserControl
                 cmd.Parameters.Add("@ListId", SqlDbType.Int).Value = _listId!.Value;
                 await cmd.ExecuteNonQueryAsync();
             }
+
+            const string unstandardizedSql = """
+                INSERT dbo.GroceryListItems (GroceryListId, IngredientId, Quantity, UnitId, Notes)
+                SELECT @ListId, ri.IngredientId, NULL, NULL,
+                       LEFT(CONCAT(N'From ', r.RecipeName, N': ', CONVERT(nvarchar(30), ri.Quantity), N' (unit not standardized)'), 200)
+                FROM dbo.MealPlanEntries e
+                JOIN dbo.Recipes r ON r.RecipeId=e.RecipeId
+                JOIN dbo.RecipeIngredients ri ON ri.RecipeId=r.RecipeId
+                WHERE e.MealPlanId=@PlanId AND ri.Quantity IS NOT NULL AND ri.UnitId IS NULL
+                  AND NOT EXISTS
+                  (
+                    SELECT 1 FROM dbo.GroceryListItems existing
+                    WHERE existing.GroceryListId=@ListId AND existing.IngredientId=ri.IngredientId
+                      AND existing.Notes=LEFT(CONCAT(N'From ', r.RecipeName, N': ', CONVERT(nvarchar(30), ri.Quantity), N' (unit not standardized)'), 200)
+                  );
+                """;
+            await using (var cmd = new SqlCommand(unstandardizedSql, connection, transaction))
+            {
+                cmd.Parameters.Add("@PlanId", SqlDbType.Int).Value = planId;
+                cmd.Parameters.Add("@ListId", SqlDbType.Int).Value = _listId!.Value;
+                await cmd.ExecuteNonQueryAsync();
+            }
             await transaction.CommitAsync();
             MessageBox.Show("Grocery items generated. Numeric quantities were combined only when ingredient and unit match; provider text measures remain separate.", "Grocery list updated", MessageBoxButtons.OK, MessageBoxIcon.Information);
             await LoadListAsync();
