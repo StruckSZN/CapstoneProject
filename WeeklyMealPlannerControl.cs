@@ -27,6 +27,7 @@ public sealed class WeeklyMealPlannerControl : UserControl
         top.Controls.Add(new Label { Text = "Meal plan", AutoSize = true, Padding = new Padding(0, 9, 0, 0) });
         top.Controls.Add(_plans);
         top.Controls.Add(ModuleUi.Button("New plan", async () => await CreatePlanAsync()));
+        top.Controls.Add(ModuleUi.Button("Rename plan", async () => await RenamePlanAsync()));
         top.Controls.Add(ModuleUi.Button("Delete plan", async () => await DeletePlanAsync()));
         _plans.SelectedIndexChanged += async (_, _) => await LoadEntriesAsync();
         Controls.Add(top);
@@ -39,6 +40,7 @@ public sealed class WeeklyMealPlannerControl : UserControl
         add.Controls.Add(new Label { Text = "Servings", AutoSize = true, Padding = new Padding(0, 9, 0, 0) });
         add.Controls.Add(_servings);
         add.Controls.Add(ModuleUi.Button("Add meal", async () => await AddEntryAsync()));
+        add.Controls.Add(ModuleUi.Button("Update selected", async () => await UpdateEntryAsync()));
         add.Controls.Add(ModuleUi.Button("Remove selected", async () => await DeleteEntryAsync()));
         Controls.Add(add);
 
