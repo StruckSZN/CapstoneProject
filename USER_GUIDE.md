@@ -24,7 +24,7 @@ Do not run `01_CreateTables.sql` repeatedly against an existing database.
 
 ## Planned local workflows
 
-The Recipe Library, Weekly Meal Planner, and Grocery List navigation destinations are currently placeholders in the checked-in application. The expected final workflow is:
+The Recipe Library, Weekly Meal Planner, and Grocery List screens are implemented on the `fix/capstone-readiness` branch. They require a configured database and seeded lookup data. The expected workflow is:
 
 1. Browse, search, sort, and maintain locally saved recipes.
 2. Create a weekly meal plan and select its week-start date.
@@ -32,7 +32,7 @@ The Recipe Library, Weekly Meal Planner, and Grocery List navigation destination
 4. Generate a grocery list from the selected plan.
 5. Add or remove items and mark purchased items.
 
-Do not assume these workflows are available until the corresponding screens have replaced the placeholders and have been tested.
+Before relying on the workflow, run the Windows build and test it against a fresh disposable SQL Server database.
 
 ## Important data notes
 
