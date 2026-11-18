@@ -1,6 +1,6 @@
 # MealWise Team Work
 
-This project was completed by Austin Carter and a classmate. Work was split between the database/API parts and the application screens, with both team members helping with testing and putting the project together.
+This project was completed by a two-person team. Work was split between the database/API parts and the application screens, with both team members helping with testing and putting the project together.
 
 ## Database and API work
 
