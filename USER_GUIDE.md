@@ -10,8 +10,8 @@
 1. Run `00_CreateDatabase.sql` in SSMS.
 2. Run `01_CreateTables.sql` against the new database.
 3. Run `02_InsertSampleData.sql` to add lookup data, example recipes, a demo user, and a sample plan.
-4. Run `05_VerifyDatabase.sql` to confirm the required schema and seed data are present.
-5. Configure the connection string in `appsettings.json` or set `CAPSTONE_CONNECTION_STRING`.
+4. Run `05_VerifyDatabase.sql` to confirm the required schema and seed data are present.\n5. Run `06_SmokeTest.sql` to exercise recipe, planner, grocery-list, update, and cascade relationships inside a transaction. It rolls back its test rows.
+6. Configure the connection string in `appsettings.json` or set `CAPSTONE_CONNECTION_STRING`.
 
 Do not run `01_CreateTables.sql` repeatedly against an existing database.
 
