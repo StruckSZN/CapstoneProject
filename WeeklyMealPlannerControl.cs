@@ -114,6 +114,26 @@ public sealed class WeeklyMealPlannerControl : UserControl
         catch (Exception ex) { MessageBox.Show(ex.Message, "Could not create plan", MessageBoxButtons.OK, MessageBoxIcon.Error); }
     }
 
+
+    private async Task RenamePlanAsync()
+    {
+        if (_plans.SelectedValue is not int id || _plans.SelectedItem is not PlannerOption selected) return;
+        var name = ModuleUi.Prompt("New plan name:", "Rename meal plan", selected.Name);
+        if (string.IsNullOrWhiteSpace(name)) return;
+        try
+        {
+            await using var connection = _database.CreateConnection();
+            await connection.OpenAsync();
+            await using var cmd = new SqlCommand("UPDATE dbo.MealPlans SET PlanName=@Name WHERE MealPlanId=@Id;", connection);
+            cmd.Parameters.Add("@Name", SqlDbType.NVarChar, 100).Value = name.Trim();
+            cmd.Parameters.Add("@Id", SqlDbType.Int).Value = id;
+            await cmd.ExecuteNonQueryAsync();
+            await LoadPlansAsync();
+            _plans.SelectedValue = id;
+        }
+        catch (Exception ex) { MessageBox.Show(ex.Message, "Could not rename plan", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+    }
+
     private async Task DeletePlanAsync()
     {
         if (_plans.SelectedValue is not int id) return;
@@ -171,6 +191,43 @@ public sealed class WeeklyMealPlannerControl : UserControl
         catch (SqlException ex) when (ex.Number == 2627 || ex.Number == 2601)
         { MessageBox.Show("That plan already has a meal in this date and meal-type slot. Remove or change the existing entry first.", "Slot already used", MessageBoxButtons.OK, MessageBoxIcon.Information); }
         catch (Exception ex) { MessageBox.Show(ex.Message, "Could not add meal", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+    }
+
+
+    private async Task UpdateEntryAsync()
+    {
+        if (_grid.CurrentRow?.Cells["MealPlanEntryId"].Value is not object value
+            || _plans.SelectedValue is not int planId
+            || _recipes.SelectedValue is not int recipeId
+            || _mealTypes.SelectedValue is not int mealId)
+        {
+            MessageBox.Show("Select a scheduled meal and choose its replacement values.");
+            return;
+        }
+
+        try
+        {
+            await using var connection = _database.CreateConnection();
+            await connection.OpenAsync();
+            await using var cmd = new SqlCommand("""
+                UPDATE dbo.MealPlanEntries
+                SET RecipeId=@RecipeId, MealTypeId=@MealId, PlannedDate=@Date, Servings=@Servings
+                WHERE MealPlanEntryId=@EntryId AND MealPlanId=@PlanId;
+                """, connection);
+            cmd.Parameters.Add("@RecipeId", SqlDbType.Int).Value = recipeId;
+            cmd.Parameters.Add("@MealId", SqlDbType.Int).Value = mealId;
+            cmd.Parameters.Add("@Date", SqlDbType.Date).Value = _date.Value.Date;
+            cmd.Parameters.Add("@Servings", SqlDbType.TinyInt).Value = (int)_servings.Value;
+            cmd.Parameters.Add("@EntryId", SqlDbType.Int).Value = Convert.ToInt32(value);
+            cmd.Parameters.Add("@PlanId", SqlDbType.Int).Value = planId;
+            await cmd.ExecuteNonQueryAsync();
+            await LoadEntriesAsync();
+        }
+        catch (SqlException ex) when (ex.Number == 2627 || ex.Number == 2601)
+        {
+            MessageBox.Show("That date and meal slot is already occupied.", "Slot already used", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        catch (Exception ex) { MessageBox.Show(ex.Message, "Could not update meal", MessageBoxButtons.OK, MessageBoxIcon.Error); }
     }
 
     private async Task DeleteEntryAsync()
