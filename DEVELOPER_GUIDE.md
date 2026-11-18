@@ -26,7 +26,7 @@ The source files are currently kept in the main project folder.
 3. Clone the repository and open `MealWise.csproj`.
 4. Run the database scripts in order: 00, 01, and 02.
 5. Run `05_VerifyDatabase.sql` and `06_SmokeTest.sql`.
-6. Set the connection string in `appsettings.json), or use the `CAPSTONE_CONNECTION_STRING` environment variable.
+6. Set the connection string in `appsettings.json`, or use the `CAPSTONE_CONNECTION_STRING` environment variable.
 7. Restore packages, build, and run the project.
 
 Only run `01_CreateTables.sql` on a new database. It creates the tables and is not a migration script.
@@ -65,4 +65,4 @@ The API measurements are saved in `RecipeIngredients.MeasureText`. The text is k
 
 ## Working on the project
 
-Use GitHub issues to keep track of work. Make changes on a branch instead of directly on `main). Before merging, build the project and test the changes. Update the user guide if the way a screen works changes.
+Use GitHub issues to keep track of work. Make changes on a branch instead of directly on `main`. Before merging, build the project and test the changes. Update the user guide if the way a screen works changes.
