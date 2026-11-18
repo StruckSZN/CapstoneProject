@@ -23,13 +23,31 @@ public sealed class MainForm : Form
         Controls.Add(root);
         root.Controls.Add(BuildSidebar(), 0, 0);
 
-        var mainArea = new Panel { Dock = DockStyle.Fill, Padding = new Padding(26) };
+        // Use explicit layout rows so the page heading never overlaps the active module toolbar.
+        // Dock=Top + Dock=Fill on sibling controls can produce z-order-dependent overlap in WinForms.
+        var mainArea = new TableLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            Padding = new Padding(26),
+            ColumnCount = 1,
+            RowCount = 2,
+            BackColor = Color.FromArgb(245, 247, 250)
+        };
+        mainArea.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        mainArea.RowStyles.Add(new RowStyle(SizeType.Absolute, 58));
+        mainArea.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         root.Controls.Add(mainArea, 1, 0);
-        _pageTitle = new Label { Text = "Dashboard", Dock = DockStyle.Top, Height = 48, Font = new Font("Segoe UI", 20F, FontStyle.Bold), ForeColor = Color.FromArgb(31, 41, 55), TextAlign = ContentAlignment.MiddleLeft };
-        mainArea.Controls.Add(_pageTitle);
-        _contentPanel = new Panel { Dock = DockStyle.Fill, Padding = new Padding(0, 18, 0, 0) };
-        mainArea.Controls.Add(_contentPanel);
-        _contentPanel.BringToFront(); _pageTitle.BringToFront();
+        _pageTitle = new Label
+        {
+            Text = "Dashboard", Dock = DockStyle.Fill,
+            Font = new Font("Segoe UI", 20F, FontStyle.Bold),
+            ForeColor = Color.FromArgb(31, 41, 55),
+            TextAlign = ContentAlignment.MiddleLeft,
+            Margin = new Padding(0)
+        };
+        mainArea.Controls.Add(_pageTitle, 0, 0);
+        _contentPanel = new Panel { Dock = DockStyle.Fill, Padding = new Padding(0), Margin = new Padding(0) };
+        mainArea.Controls.Add(_contentPanel, 0, 1);
         ShowPage("Dashboard", new DashboardControl(_database));
     }
 
