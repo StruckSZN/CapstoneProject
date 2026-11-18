@@ -2,7 +2,7 @@
 
 MealWise is a Windows desktop app made with C#, .NET 8 Windows Forms, and SQL Server. The app lets users search for recipes, save them, plan meals for the week, and make a grocery list.
 
-This project was completed as a team by Austin Carter and a classmate.
+This project was completed by a two-person team.
 
 ## Project status
 
