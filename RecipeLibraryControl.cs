@@ -200,6 +200,6 @@ internal sealed class RecipeEditDialog : Form
         buttons.Controls.Add(save); buttons.Controls.Add(cancel);
         layout.Controls.Add(buttons, 0, 3); layout.SetColumnSpan(buttons, 2);
         Controls.Add(layout); AcceptButton = save; CancelButton = cancel;
-        save.Click += (_, e) => { if (string.IsNullOrWhiteSpace(_name.Text)) { e = null!; MessageBox.Show("Recipe name is required."); DialogResult = DialogResult.None; } };
+        save.Click += (_, e) => { if (string.IsNullOrWhiteSpace(_name.Text)) { MessageBox.Show("Recipe name is required."); DialogResult = DialogResult.None; } };
     }
 }
