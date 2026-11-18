@@ -5,7 +5,7 @@ MealWise is a Windows desktop meal-planning application built with C#/.NET 8 Win
 ## Current project status
 
 - **Implemented:** WinForms application shell, dashboard/database connectivity check, TheMealDB search and recipe details, transactional recipe import, SQL Server schema and seed/reporting scripts.
-- **In progress:** local Recipe Library CRUD, Weekly Meal Planner, and Grocery List workflows. The navigation entries currently identify these as planned modules; do not treat them as complete until their screens and database operations are integrated and tested.
+- **Implemented on the `fix/capstone-readiness` branch:** Recipe Library CRUD/search, Weekly Meal Planner plan/entry management, and Grocery List generation/item management. These modules still require a successful CI build and live SQL Server integration testing before the pull request should be merged.
 - **Database:** 15 normalized tables are defined in `01_CreateTables.sql`.
 
 ## Requirements
