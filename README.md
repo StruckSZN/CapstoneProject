@@ -1,11 +1,11 @@
 # MealWise — Meal Planner Capstone
 
-MealWise is a Windows desktop meal-planning application built with C#/.NET 8 Windows Forms and SQL Server. It combines a local recipe library with TheMealDB recipe search and a normalized relational database.
+MealWise is a Windows desktop meal-planning application built with C#/.NET 8 Windows Forms and SQL Server. It combines a local recipe library with TheMealDB recipe search and a normalized relational database.\n\n**Project owner:** Austin Carter
 
 ## Current project status
 
 - **Implemented:** WinForms application shell, dashboard/database connectivity check, TheMealDB search and recipe details, transactional recipe import, SQL Server schema and seed/reporting scripts.
-- **Implemented on the `fix/capstone-readiness` branch:** Recipe Library CRUD/search, Weekly Meal Planner plan/entry management, and Grocery List generation/item management. The latest Windows CI build passed; live SQL Server integration and end-to-end UI testing remain outstanding.
+- **Implemented:** Recipe Library CRUD/search, Weekly Meal Planner plan/entry management, and Grocery List generation/item management. The project owner verified the application against local SQL Server Express; the database verification script and transactional CRUD smoke test both returned PASS, and the core UI workflows were exercised successfully. The latest Windows .NET 8 CI build also passed.
 - **Database:** 15 normalized tables are defined in `01_CreateTables.sql`.
 
 ## Requirements
