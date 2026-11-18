@@ -23,16 +23,40 @@ public sealed class WeeklyMealPlannerControl : UserControl
 
     private void BuildUi()
     {
-        var top = new FlowLayoutPanel { Dock = DockStyle.Top, Height = 48, WrapContents = false, Padding = new Padding(0, 4, 0, 4) };
+        // Explicit rows prevent the two toolbars from overlapping due to WinForms Dock z-order.
+        var layout = new TableLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            ColumnCount = 1,
+            RowCount = 3,
+            Padding = new Padding(0),
+            Margin = new Padding(0),
+            BackColor = BackColor
+        };
+        layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 48));
+        layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 48));
+        layout.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+        Controls.Add(layout);
+
+        var top = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Fill, Height = 48, WrapContents = false,
+            AutoScroll = true, Padding = new Padding(0, 4, 0, 4), Margin = new Padding(0)
+        };
         top.Controls.Add(new Label { Text = "Meal plan", AutoSize = true, Padding = new Padding(0, 9, 0, 0) });
         top.Controls.Add(_plans);
         top.Controls.Add(ModuleUi.Button("New plan", async () => await CreatePlanAsync()));
         top.Controls.Add(ModuleUi.Button("Rename plan", async () => await RenamePlanAsync()));
         top.Controls.Add(ModuleUi.Button("Delete plan", async () => await DeletePlanAsync()));
         _plans.SelectedIndexChanged += async (_, _) => await LoadEntriesAsync();
-        Controls.Add(top);
+        layout.Controls.Add(top, 0, 0);
 
-        var add = new FlowLayoutPanel { Dock = DockStyle.Top, Height = 48, WrapContents = false, Padding = new Padding(0, 4, 0, 4) };
+        var add = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Fill, Height = 48, WrapContents = false,
+            AutoScroll = true, Padding = new Padding(0, 4, 0, 4), Margin = new Padding(0)
+        };
         add.Controls.Add(new Label { Text = "Recipe", AutoSize = true, Padding = new Padding(0, 9, 0, 0) });
         add.Controls.Add(_recipes);
         add.Controls.Add(_date);
@@ -42,13 +66,13 @@ public sealed class WeeklyMealPlannerControl : UserControl
         add.Controls.Add(ModuleUi.Button("Add meal", async () => await AddEntryAsync()));
         add.Controls.Add(ModuleUi.Button("Update selected", async () => await UpdateEntryAsync()));
         add.Controls.Add(ModuleUi.Button("Remove selected", async () => await DeleteEntryAsync()));
-        Controls.Add(add);
+        layout.Controls.Add(add, 0, 1);
 
         _grid.Dock = DockStyle.Fill; _grid.ReadOnly = true; _grid.AllowUserToAddRows = false;
         _grid.AllowUserToDeleteRows = false; _grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         _grid.MultiSelect = false; _grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-        _grid.BackgroundColor = Color.White; _grid.RowHeadersVisible = false;
-        Controls.Add(_grid);
+        _grid.BackgroundColor = Color.White; _grid.RowHeadersVisible = false; _grid.Margin = new Padding(0);
+        layout.Controls.Add(_grid, 0, 2);
     }
 
     private async Task LoadLookupsAsync()
