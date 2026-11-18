@@ -97,7 +97,7 @@ public sealed class DashboardControl : UserControl
         });
         featureCard.Controls.Add(new Label
         {
-            Text = "Recipe search and import: connected to TheMealDB API\nRecipe library, weekly planner, and grocery list: modules under development",
+            Text = "Recipe search and import: connected to TheMealDB API\nRecipe library: browse, search, add, edit, and delete recipes\nWeekly meal planner: manage plans and scheduled meals\nGrocery list: generate, edit, and check off shopping items",
             AutoSize = true,
             Location = new Point(22, 52),
             ForeColor = Color.FromArgb(75, 85, 99)
