@@ -5,7 +5,7 @@ MealWise is a Windows desktop meal-planning application built with C#/.NET 8 Win
 ## Current project status
 
 - **Implemented:** WinForms application shell, dashboard/database connectivity check, TheMealDB search and recipe details, transactional recipe import, SQL Server schema and seed/reporting scripts.
-- **Implemented on the `fix/capstone-readiness` branch:** Recipe Library CRUD/search, Weekly Meal Planner plan/entry management, and Grocery List generation/item management. These modules still require a successful CI build and live SQL Server integration testing before the pull request should be merged.
+- **Implemented on the `fix/capstone-readiness` branch:** Recipe Library CRUD/search, Weekly Meal Planner plan/entry management, and Grocery List generation/item management. The latest Windows CI build passed; live SQL Server integration and end-to-end UI testing remain outstanding.
 - **Database:** 15 normalized tables are defined in `01_CreateTables.sql`.
 
 ## Requirements
@@ -24,6 +24,7 @@ MealWise is a Windows desktop meal-planning application built with C#/.NET 8 Win
    - `00_CreateDatabase.sql`
    - `01_CreateTables.sql`
    - `02_InsertSampleData.sql`
+   - `05_VerifyDatabase.sql` (read-only verification; run after the sample data script)
 4. Configure the connection string:
    - Copy `appsettings.example.json` to `appsettings.json` if needed.
    - Set `ConnectionStrings:DefaultConnection` to your SQL Server instance.
@@ -44,7 +45,7 @@ The project currently keeps source and documentation files at the repository roo
 | `MealDbSearchControl.cs`, `MealDbApiService.cs` | External recipe search |
 | `RecipeImportRepository.cs`, `DatabaseService.cs` | SQL Server persistence/connectivity |
 | `ExternalMealDetails.cs`, `ExternalMealSummary.cs` | API models |
-| `00_*.sql`–`04_*.sql` | Database creation, schema, seed, examples, reports |
+| `00_*.sql`–`05_*.sql` | Database creation, schema, seed, examples, reports, verification |
 | `ERD.md`, `3NF_AND_SCHEMA.md` | Data model and normalization |
 | `DEVELOPER_GUIDE.md`, `USER_GUIDE.md` | Setup and usage documentation |
 
