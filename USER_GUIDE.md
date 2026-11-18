@@ -10,7 +10,8 @@
 1. Run `00_CreateDatabase.sql` in SSMS.
 2. Run `01_CreateTables.sql` against the new database.
 3. Run `02_InsertSampleData.sql` to add lookup data, example recipes, a demo user, and a sample plan.
-4. Configure the connection string in `appsettings.json` or set `CAPSTONE_CONNECTION_STRING`.
+4. Run `05_VerifyDatabase.sql` to confirm the required schema and seed data are present.
+5. Configure the connection string in `appsettings.json` or set `CAPSTONE_CONNECTION_STRING`.
 
 Do not run `01_CreateTables.sql` repeatedly against an existing database.
 
@@ -22,7 +23,7 @@ Do not run `01_CreateTables.sql` repeatedly against an existing database.
 4. Review the recipe name, category, cuisine/area, ingredients, measures, and cooking instructions.
 5. Choose **Save to recipe library** to import it into the local database.
 
-## Planned local workflows
+## Local recipe, planner, and grocery workflows
 
 The Recipe Library, Weekly Meal Planner, and Grocery List screens are implemented on the `fix/capstone-readiness` branch. They require a configured database and seeded lookup data. The expected workflow is:
 
