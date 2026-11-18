@@ -216,6 +216,50 @@ public sealed class GroceryListControl : UserControl
         catch (Exception ex) { MessageBox.Show(ex.Message, "Could not add item", MessageBoxButtons.OK, MessageBoxIcon.Error); }
     }
 
+
+    private async Task EditItemAsync()
+    {
+        if (_grid.CurrentRow?.Cells["GroceryListItemId"].Value is not object idValue) return;
+        var currentNotes = Convert.ToString(_grid.CurrentRow.Cells["Notes"].Value) ?? "";
+        var currentQuantity = Convert.ToString(_grid.CurrentRow.Cells["Quantity"].Value) ?? "";
+        var notes = ModuleUi.Prompt("Notes / measurement:", "Edit grocery item", currentNotes);
+        if (notes is null) return;
+        var quantityText = ModuleUi.Prompt("Quantity (leave blank for text-only):", "Edit grocery item", currentQuantity);
+        if (quantityText is null) return;
+
+        decimal? quantity = null;
+        if (!string.IsNullOrWhiteSpace(quantityText))
+        {
+            if (!decimal.TryParse(quantityText, System.Globalization.NumberStyles.Number,
+                System.Globalization.CultureInfo.CurrentCulture, out var parsed) || parsed <= 0)
+            {
+                MessageBox.Show("Quantity must be a positive number or blank.");
+                return;
+            }
+            quantity = parsed;
+        }
+
+        try
+        {
+            await using var connection = _database.CreateConnection();
+            await connection.OpenAsync();
+            await using var cmd = new SqlCommand("""
+                UPDATE dbo.GroceryListItems SET Notes=@Notes, Quantity=@Quantity
+                WHERE GroceryListItemId=@Id;
+                """, connection);
+            cmd.Parameters.Add("@Notes", SqlDbType.NVarChar, 200).Value =
+                string.IsNullOrWhiteSpace(notes) ? DBNull.Value : notes.Trim();
+            var quantityParameter = cmd.Parameters.Add("@Quantity", SqlDbType.Decimal);
+            quantityParameter.Precision = 10;
+            quantityParameter.Scale = 2;
+            quantityParameter.Value = quantity.HasValue ? quantity.Value : DBNull.Value;
+            cmd.Parameters.Add("@Id", SqlDbType.Int).Value = Convert.ToInt32(idValue);
+            await cmd.ExecuteNonQueryAsync();
+            await LoadListAsync();
+        }
+        catch (Exception ex) { MessageBox.Show(ex.Message, "Could not update item", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+    }
+
     private async Task DeleteItemAsync()
     {
         if (_grid.CurrentRow?.Cells["GroceryListItemId"].Value is not object value) return;
