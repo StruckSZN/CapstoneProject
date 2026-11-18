@@ -1,13 +1,12 @@
-# Contributing to MealWise
+# Working on MealWise
 
-1. Check the GitHub Projects board/issues before starting work.
-2. Assign yourself an issue and move it to In Progress.
-3. Create a branch named for the issue, such as `feature/weekly-planner` or `fix/recipe-import`.
-4. Make focused commits with clear messages.
-5. Build and test your changes locally.
-6. Open a pull request to `main`, link the issue, and describe your test steps.
-7. Request a code review from the other teammate. Address requested changes before merge.
-8. Update documentation when a feature, schema, or user workflow changes.
-9. Merge only after approval and a successful build/test. Close the issue after merge.
+1. Check the GitHub issues before starting a task.
+2. Create a branch for the feature or fix.
+3. Make changes and commit them with a short description.
+4. Build and test the project.
+5. Open a pull request to `main) and explain what changed.
+6. Ask the other team member to review the changes.
+7. Update the documentation if the feature or instructions changed.
+8. Merge after the changes have been reviewed and tested.
 
-Do not email source files. Do not commit passwords, API credentials, local database files, `bin/`, or `obj/` output.
+Do not commit passwords, private API keys, local database files, or build output such as `bin/` and `obj/`.
