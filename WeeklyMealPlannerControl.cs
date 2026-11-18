@@ -107,7 +107,7 @@ public sealed class WeeklyMealPlannerControl : UserControl
             await using var cmd = new SqlCommand("INSERT dbo.MealPlans (UserId, PlanName, WeekStartDate) VALUES (@UserId,@Name,@WeekStart); SELECT CAST(SCOPE_IDENTITY() AS int);", connection);
             cmd.Parameters.Add("@UserId", SqlDbType.Int).Value = userId.Value;
             cmd.Parameters.Add("@Name", SqlDbType.NVarChar, 100).Value = name.Trim();
-            cmd.Parameters.Add("@WeekStart", SqlDbType.Date).Value = _date.Value.Date.AddDays(-((int)_date.Value.DayOfWeek + 6) % 7);
+            cmd.Parameters.Add("@WeekStart", SqlDbType.Date).Value = _date.Value.Date.AddDays(-(((int)_date.Value.DayOfWeek + 6) % 7));
             var id = Convert.ToInt32(await cmd.ExecuteScalarAsync());
             await LoadPlansAsync(); _plans.SelectedValue = id;
         }
