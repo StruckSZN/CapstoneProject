@@ -24,7 +24,7 @@ MealWise is a Windows desktop meal-planning application built with C#/.NET 8 Win
    - `00_CreateDatabase.sql`
    - `01_CreateTables.sql`
    - `02_InsertSampleData.sql`
-   - `05_VerifyDatabase.sql` (read-only verification; run after the sample data script)
+   - `05_VerifyDatabase.sql` (read-only verification; run after the sample data script)\n   - `06_SmokeTest.sql` (transactional CRUD/relationship smoke test; test rows are rolled back)
 4. Configure the connection string:
    - Copy `appsettings.example.json` to `appsettings.json` if needed.
    - Set `ConnectionStrings:DefaultConnection` to your SQL Server instance.
@@ -45,7 +45,7 @@ The project currently keeps source and documentation files at the repository roo
 | `MealDbSearchControl.cs`, `MealDbApiService.cs` | External recipe search |
 | `RecipeImportRepository.cs`, `DatabaseService.cs` | SQL Server persistence/connectivity |
 | `ExternalMealDetails.cs`, `ExternalMealSummary.cs` | API models |
-| `00_*.sql`–`05_*.sql` | Database creation, schema, seed, examples, reports, verification |
+| `00_*.sql`–`06_*.sql` | Database creation, schema, seed, examples, reports, verification, transactional smoke test |
 | `ERD.md`, `3NF_AND_SCHEMA.md` | Data model and normalization |
 | `DEVELOPER_GUIDE.md`, `USER_GUIDE.md` | Setup and usage documentation |
 
