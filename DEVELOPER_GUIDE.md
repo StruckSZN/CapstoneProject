@@ -15,7 +15,7 @@ Source files and documentation currently live at the repository root. The folder
 - Data access: `DatabaseService.cs`, `RecipeImportRepository.cs`.
 - API integration: `MealDbApiService.cs`.
 - API models: `ExternalMealDetails.cs`, `ExternalMealSummary.cs`.
-- SQL: `00_CreateDatabase.sql` through `04_Complex_Select_Queries.sql`.
+- SQL: `00_CreateDatabase.sql` through `05_VerifyDatabase.sql`.
 - Documentation: Markdown files at the repository root.
 
 Do not add project-relative paths such as `Forms/`, `Data/`, `Models/`, `Services/`, `Sql/`, or `Docs/` to instructions unless those directories have actually been created and the project has been migrated.
@@ -25,10 +25,11 @@ Do not add project-relative paths such as `Forms/`, `Data/`, `Models/`, `Service
 1. Install Visual Studio 2022 with .NET desktop development, .NET 8, and SQL Server LocalDB/Express.
 2. Clone the repository and open `MealWise.csproj`.
 3. Create the database by running `00_CreateDatabase.sql`, then run `01_CreateTables.sql` and `02_InsertSampleData.sql` in SSMS.
-4. Configure `appsettings.json` using `appsettings.example.json`, or set `CAPSTONE_CONNECTION_STRING`.
-5. Restore NuGet packages, build, and run the WinForms application.
+4. Run `05_VerifyDatabase.sql` to verify the required tables, relationships, and seed records.
+5. Configure `appsettings.json` using `appsettings.example.json`, or set `CAPSTONE_CONNECTION_STRING`.
+6. Restore NuGet packages, build, and run the WinForms application.
 
-Run `01_CreateTables.sql` only against an empty database. It creates tables and is not a migration script. Scripts 03 and 04 are optional examples/reports.
+Run `01_CreateTables.sql` only against an empty database. It creates tables and is not a migration script. Scripts 03 and 04 are optional examples/reports; script 05 is a read-only setup verification.
 
 ## Database access conventions
 
@@ -59,6 +60,7 @@ The API import stores provider measurements in `RecipeIngredients.MeasureText` b
 3. `02_InsertSampleData.sql`
 4. `03_Data_Change_Examples.sql` (demonstration insert/update/delete)
 5. `04_Complex_Select_Queries.sql` (reporting examples)
+6. `05_VerifyDatabase.sql` (read-only setup verification)
 
 Do not run schema creation against an existing populated database.
 
