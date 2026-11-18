@@ -3,9 +3,14 @@
 **/obj/
 *.user
 *.suo
+
 # Local credentials or machine-specific settings
 appsettings.local.json
+secrets.json
+.env
+.env.*
+
+# Local database files
 *.mdf
 *.ldf
 *.db
-secrets.json

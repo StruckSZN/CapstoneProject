@@ -1,59 +1,65 @@
 # Work Split — MealWise Capstone
 
-The division below gives each student ownership of complete deliverables. Both students still review and test the integrated application. Each feature is developed on a separate GitHub branch and merged through a reviewed pull request.
+This document records the original responsibility split and the shared integration contract. It is a planning agreement, not evidence that a feature has been completed. Update ownership with the teammate before changing assignments.
 
-## You — database, API, and application foundation
+## Original ownership — project foundation
 
-1. Own `Sql/00_CreateDatabase.sql` through `Sql/04_Complex_Select_Queries.sql`.
-2. Own `Docs/ERD.md` and `Docs/3NF_AND_SCHEMA.md`.
-3. Own `Data/DatabaseService.cs`, `Data/RecipeImportRepository.cs`, `Models/`, and `Services/MealDbApiService.cs`.
-4. Own the `Find Recipes (API)` screen and its recipe-detail/import workflow.
-5. Own dashboard and main navigation/application shell.
-6. Own `Docs/API_DOCUMENTATION.md`, initial project proposal, and developer-guide draft.
-7. Create the repository structure and GitHub issue/milestone framework with the classmate.
+1. SQL schema, seed scripts, and reporting examples: `00_CreateDatabase.sql` through `04_Complex_Select_Queries.sql`.
+2. Data model documentation: `ERD.md`, `3NF_AND_SCHEMA.md`.
+3. Database/API foundation: `DatabaseService.cs`, `RecipeImportRepository.cs`, `MealDbApiService.cs`, and API model files.
+4. The **Find Recipes (API)** screen and transactional import workflow.
+5. Dashboard and main navigation/application shell.
+6. Initial proposal, API documentation, and developer guide.
 
-**Definition of done:** database scripts run in order; the schema has at least eight tables and valid PK/FK constraints; sample data is present; the ERD matches the schema; SQL examples execute; API search returns results; full recipe details display; selecting Save imports one recipe and its ingredients transactionally; duplicate import updates rather than duplicates.
+## Original ownership — local application modules
 
-## Classmate — local application features and user experience
-
-1. Own the Recipe Library screen and its CRUD operations for locally saved recipes.
-2. Own the Weekly Meal Planner screen, meal plan CRUD, and meal-entry CRUD.
-3. Own the Grocery List screen and grocery-item CRUD.
-4. Own search, sorting, form validation, and user-facing error messages across assigned screens.
-5. Own wireframe refinement, `Docs/USER_GUIDE.md`, and README screenshots/final usage instructions.
-6. Own feature testing notes for their assigned modules.
-
-**Definition of done:** users can create/read/update/delete local recipes; search and sort the library; create/edit/delete a weekly plan; assign one recipe per date/meal type with a serving count; generate/update a grocery list from a plan; add/edit/delete grocery items; mark items purchased; validate input and show useful errors.
+1. Recipe Library browsing, CRUD, search, and sorting.
+2. Weekly Meal Planner CRUD and meal-entry assignment.
+3. Grocery List generation, CRUD, and purchased-item check-off.
+4. Form validation, useful error messages, and module testing.
+5. User-guide updates, screenshots, and final usage instructions.
 
 ## Shared responsibilities
 
-- Both agree on the final feature list and database changes before implementation.
-- Both create/resolve GitHub issues and follow sprint milestones.
-- Both use feature branches and pull requests; neither emails source code.
-- Each reviews the other's pull requests and records review feedback.
-- Both run the full application and test cross-module workflows.
+- Agree on feature scope and schema changes before implementation.
+- Create GitHub issues and use feature branches and reviewed pull requests.
+- Each teammate reviews the other's work and records feedback.
+- Both run the complete application and test cross-module workflows.
 - Both contribute to meeting notes, sprint planning, final reflection, and presentation.
 
 ## Integration contract
 
-- Database names, table names, columns, and relationships in `Sql/01_CreateTables.sql` are the shared contract. Propose schema changes through an issue and coordinate before changing a table.
-- The classmate should use `DatabaseService.CreateConnection()` and parameterized `SqlCommand` statements or agree a shared repository abstraction with You. Never concatenate user-entered text into SQL.
-- The API import writes a recipe into `Recipes` and its ingredients into `Ingredients` / `RecipeIngredients`. The Recipe Library module should read those same tables; do not create a separate recipe table.
-- The planner stores plan records in `MealPlans` and scheduled slots in `MealPlanEntries`.
-- The grocery module stores lists in `GroceryLists` and items in `GroceryListItems`.
-- A plan has one grocery list (`GroceryLists.MealPlanId` is unique). Ingredient aggregation must not combine quantities expressed in different units. Leave imported `MeasureText` visible when its amount/unit cannot be safely converted.
-- Keep `main` buildable. Open a PR for each completed issue and request review from the other teammate.
+- `01_CreateTables.sql` is the database contract. It defines 15 tables and the PK/FK relationships.
+- Use `DatabaseService.CreateConnection()` and parameterized SQL.
+- API imports write to `Recipes` and `RecipeIngredients`; the local library must use those same tables, not a second recipe store.
+- The planner uses `MealPlans` and `MealPlanEntries`.
+- The grocery module uses `GroceryLists` and `GroceryListItems`.
+- One grocery list is allowed per meal plan.
+- Imported provider measures are stored as `MeasureText`. Never sum quantities across different or unknown units. Preserve original text if a safe numeric conversion is unavailable.
+- Keep `main` buildable and use pull requests for integration.
 
-## Suggested GitHub issues
+## Feature acceptance criteria
 
-| Issue | Owner | Suggested branch |
-|---|---|---|
-| Create SQL schema and seed scripts | You | `feature/database-schema` |
-| Add ERD and 3NF documentation | You | `docs/erd-3nf` |
-| Implement TheMealDB search and details | You | `feature/themealdb-search` |
-| Import API recipes into SQL Server | You | `feature/recipe-import` |
-| Build Recipe Library CRUD/search/sort | Classmate | `feature/recipe-library` |
-| Build Weekly Meal Planner CRUD | Classmate | `feature/weekly-planner` |
-| Build Grocery List generation and CRUD | Classmate | `feature/grocery-list` |
-| Integration and regression testing | Both | `test/integration` |
-| Complete docs and presentation | Both | `docs/final-submission` |
+### Recipe Library
+- Read all saved recipes and display useful details.
+- Create, edit, and delete recipes with validation.
+- Search by name and sort results.
+- Preserve source metadata and ingredient relationships.
+
+### Weekly Meal Planner
+- Create, rename, and delete a plan.
+- Add, edit, and remove planned entries.
+- Enforce one recipe per date/meal type, consistent with the database unique constraint.
+- Store positive serving counts and display the selected week clearly.
+
+### Grocery List
+- Create or retrieve the list for a meal plan.
+- Generate items from planned recipes without combining incompatible units.
+- Add, edit, delete, and mark items purchased.
+- Preserve provider measure text where numeric normalization is not safe.
+
+### Integration and submission
+- Fresh database setup works from the SQL scripts.
+- API search/import and all local modules operate against the same database.
+- Build and regression test results are recorded in the pull request.
+- User guide and final reflection match the delivered application.
