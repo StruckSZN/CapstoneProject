@@ -14,7 +14,7 @@ Planning meals across a week can involve several disconnected tasks: finding rec
 2. Create a relational database with at least eight tables, PKs, FKs, referential integrity, and a documented 3NF design.
 3. Implement complete create, read, update, and delete operations for recipes, meal plans, planned meals, and grocery items.
 4. Provide search, sorting, and field validation.
-5. Integrate an external recipe API in a way that supports a real workflow: find a recipe, review the full details, and save it to the local recipe library for later planning.
+5. Connect to an external recipe API so users can find a recipe, view its details, and save it to the recipe library.
 6. Provide SQL scripts, ERD, technical documentation, a user guide, and a developer guide.
 7. Use GitHub issues, milestones, branches, pull requests, and code reviews for team collaboration.
 
@@ -34,7 +34,7 @@ A person or household member who wants to save recipes, plan breakfast/lunch/din
 
 ## External API
 
-TheMealDB V1 REST API will be used for recipe search and full recipe lookup. Search results are not merely displayed: the user can retrieve a recipe's full details and import the recipe and its ingredients into SQL Server. The saved recipe can then be used by the local meal planner and grocery-list modules.
+TheMealDB V1 REST API will be used for recipe search and full recipe lookup. The user can open a result and save the recipe and its ingredients to SQL Server. The saved recipe can then be used by the local meal planner and grocery-list modules.
 
 ## Database overview
 
@@ -50,7 +50,7 @@ The proposed database contains 15 tables: AppUsers, DietaryRestrictions, UserDie
 
 ## Success criteria
 
-The project is considered complete when all required features work, the database has at least eight related tables and is documented in 3NF, SQL scripts demonstrate required operations and queries, recipe API data is imported into the local database, the UI validates user input, the required documents are present, and both teammates demonstrate their contributions through GitHub history and the final presentation.
+The planned result is a working desktop app with a related SQL Server database, recipe search and import, meal planning, grocery lists, and project documentation.
 
 ## Scope limitations
 
