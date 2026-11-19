@@ -1,58 +1,47 @@
 # Database Schema and Third Normal Form
 
-## Table inventory
+## Tables
 
 | Table | Purpose | Primary key |
 |---|---|---|
-| AppUsers | Local user profile/owner of meal plans | UserId |
-| DietaryRestrictions | Controlled list of dietary restriction labels | RestrictionId |
+| AppUsers | Local user profile and meal-plan owner | UserId |
+| DietaryRestrictions | List of dietary restriction labels | RestrictionId |
 | UserDietaryRestrictions | Restrictions selected by a user | UserId + RestrictionId |
-| MealTypes | Breakfast, lunch, dinner, snack | MealTypeId |
-| RecipeCategories | Recipe category lookup values | CategoryId |
-| Cuisines | Cuisine/region lookup values | CuisineId |
-| Recipes | Saved recipe details and external source identifiers | RecipeId |
-| Ingredients | Canonical ingredient names | IngredientId |
-| MeasurementUnits | Units used to quantify recipe/grocery ingredients | UnitId |
-| RecipeIngredients | Ingredient and amount details for each recipe | RecipeIngredientId |
-| RecipeDietaryRestrictions | Dietary labels associated with recipes | RecipeId + RestrictionId |
-| MealPlans | A user's named weekly plan | MealPlanId |
+| MealTypes | Breakfast, lunch, dinner, and snack | MealTypeId |
+| RecipeCategories | Recipe category names | CategoryId |
+| Cuisines | Cuisine or region names | CuisineId |
+| Recipes | Saved recipe details and source IDs | RecipeId |
+| Ingredients | Ingredient names | IngredientId |
+| MeasurementUnits | Measurement units | UnitId |
+| RecipeIngredients | Ingredients and amounts for recipes | RecipeIngredientId |
+| RecipeDietaryRestrictions | Dietary labels for recipes | RecipeId + RestrictionId |
+| MealPlans | A user's weekly meal plan | MealPlanId |
 | MealPlanEntries | A recipe scheduled for a date and meal type | MealPlanEntryId |
-| GroceryLists | Grocery list associated with a meal plan | GroceryListId |
-| GroceryListItems | Ingredient items and purchase status on a list | GroceryListItemId |
+| GroceryLists | Grocery list for a meal plan | GroceryListId |
+| GroceryListItems | Items and purchase status | GroceryListItemId |
 
-## Normalization rationale
-
-### First Normal Form (1NF)
+## First Normal Form (1NF)
 
 - Each table has a primary key.
-- Each column holds a single value rather than a repeating group or comma-separated list.
-- Recipe ingredients are stored as separate rows in `RecipeIngredients`, not as a text list inside `Recipes`.
-- A planned breakfast, lunch, dinner, or snack is represented by a separate `MealPlanEntries` row.
+- Each column stores one value.
+- Recipe ingredients are stored in separate rows in `RecipeIngredients`, not as a list in the recipe table.
+- Each scheduled meal has its own row in `MealPlanEntries`.
 
-### Second Normal Form (2NF)
+## Second Normal Form (2NF)
 
-- Tables with a single-column primary key have all non-key attributes dependent on that key.
-- The two many-to-many bridge tables, `UserDietaryRestrictions` and `RecipeDietaryRestrictions`, use composite primary keys. They contain no non-key attribute that depends on only part of the composite key.
-- `RecipeIngredients` uses its own row identifier; each row describes one ingredient's use in one recipe.
+- Non-key columns depend on the key for their row.
+- The bridge tables `UserDietaryRestrictions` and `RecipeDietaryRestrictions` use composite keys.
+- The ingredient rows describe the ingredients used by each recipe.
 
-### Third Normal Form (3NF)
+## Third Normal Form (3NF)
 
-- Lookup descriptions are stored once in lookup tables. For example, category names are stored in `RecipeCategories`, cuisine names in `Cuisines`, and meal type names in `MealTypes`; recipes and meal entries store only their foreign keys.
-- Ingredient names are stored in `Ingredients`, and unit names/abbreviations are stored in `MeasurementUnits`. Recipe and grocery rows reference those entities instead of repeating their descriptive values.
-- User restriction names and recipe restriction names are stored once in `DietaryRestrictions`; bridge tables store only relationship keys and relationship-specific notes where applicable.
-- `Recipes` stores recipe-specific attributes and foreign keys to its category/cuisine. It does not store category/cuisine descriptions.
-- No non-key attribute is intentionally dependent on another non-key attribute. The week end date is calculated by the UI from `WeekStartDate` rather than stored redundantly.
+- Category, cuisine, meal type, ingredient, unit, and restriction names are kept in their own tables.
+- Recipes and meal entries use foreign keys to refer to those values.
+- The bridge tables store the relationships between users, recipes, and dietary restrictions.
+- The week end date is calculated from `WeekStartDate` instead of being stored as another date.
 
-## Referential integrity
+## Relationships and constraints
 
-Foreign keys are created in `Sql/01_CreateTables.sql`. Cascading deletes are limited to dependent rows that should not exist without their parent (for example, deleting a meal plan removes its entries and grocery list). A recipe referenced by a meal-plan entry cannot be deleted until its planned use is resolved, preventing accidental loss of meal-plan history.
+The table creation script is `01_CreateTables.sql`. It defines the foreign keys and other constraints. Some related rows are deleted when their parent meal plan is deleted. A recipe that is still used by a meal-plan entry cannot be deleted until that entry is removed.
 
-## Constraints and indexes
-
-- Unique constraints prevent duplicate lookup names.
-- A filtered unique index prevents duplicate imports of the same TheMealDB recipe ID.
-- Check constraints prevent negative time/quantity values and zero servings.
-- A unique key prevents two entries occupying the same meal type on the same date within one plan.
-- Indexes support recipe name, ingredient lookup, plan-by-week, and grocery-list status queries.
-
-The SQL scripts are the authoritative schema. Update this document and `ERD.md` whenever a schema change is accepted.
+The database also uses unique constraints, check constraints, and indexes for common lookups. The SQL scripts are the source for the actual table definitions, so this document should be updated if the schema changes.

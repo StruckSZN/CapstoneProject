@@ -1,38 +1,35 @@
-# GitHub Workflow and Milestones
+# GitHub Workflow
 
-## Suggested milestones
+We used GitHub to keep the project files together and track changes while working on MealWise.
 
-| Milestone | Target date | Scope |
+## Project dates
+
+| Milestone | Target date | Work |
 |---|---|---|
-| M1 — Database and API foundation | Nov 17, 2026 | ERD, normalized schema, SQL build scripts, API search/import |
-| M2 — Recipe library and planner | Nov 24, 2026 | Recipe CRUD, search/sort, meal-plan CRUD and entries |
-| M3 — Grocery list and integration | Dec 1, 2026 | Grocery workflow, integration, code review, end-to-end testing |
-| M4 — Final submission | Dec 8, 2026 | Documentation, regression test, screenshots, final presentation |
+| Database and API | Nov 17, 2026 | ERD, tables, sample data, recipe search and import |
+| Recipe Library and Planner | Nov 24, 2026 | Recipe editing and weekly meal planning |
+| Grocery List and testing | Dec 1, 2026 | Grocery list, connecting the screens, and testing |
+| Final submission | Dec 8, 2026 | Fixes, screenshots, documentation, and presentation |
 
-## Required GitHub evidence
+## Using GitHub
 
-- At least one meaningful issue per substantial feature or defect.
-- Milestones grouping issues by sprint/deliverable.
-- One or more feature branches per student; do not develop on `main`.
-- Pull requests linked to issues.
-- Review comments and approvals from the other teammate.
-- Commits with meaningful descriptions.
+- Create issues for larger tasks or bugs.
+- Use branches when working on a feature.
+- Make commits that explain what changed.
+- Open a pull request when work is ready to review.
+- Have the other team member review changes when possible.
+- Build and test before merging changes into `main`.
 
-## Branch naming
+## Example branch names
 
 - `feature/recipe-library`
 - `feature/weekly-planner`
 - `feature/grocery-list`
 - `feature/themealdb-search`
 - `feature/recipe-import`
-- `docs/erd-3nf`
-- `fix/<short-description>`
+- `docs/database-design`
+- `fix/short-description`
 
-## Suggested first issues
+## Main project tasks
 
-1. You: Implement SQL schema, seed, operation and reporting scripts.
-2. You: Implement TheMealDB search and recipe import.
-3. Classmate: Implement Recipe Library CRUD/search/sort.
-4. Classmate: Implement Weekly Meal Planner CRUD.
-5. Classmate: Implement Grocery List generation and CRUD.
-6. Both: Integration/regression test and final documentation.
+The work included the database and API setup, recipe search and import, Recipe Library, Weekly Meal Planner, Grocery List, testing, and documentation. Some parts were handled separately, and other parts were worked on together.

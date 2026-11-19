@@ -1,55 +1,67 @@
 # MealWise Developer Guide
 
-## Architecture
+## Tools used
 
-- `Forms/` contains the WinForms UI controls and main window.
-- `Data/DatabaseService.cs` creates SQL Server connections and tests connectivity.
-- `Data/RecipeImportRepository.cs` persists TheMealDB recipe details using parameterized SQL and a transaction.
-- `Services/MealDbApiService.cs` handles HTTPS requests and converts TheMealDB JSON into typed models.
-- `Models/` contains data-transfer models used by the API integration.
-- `Sql/` contains the authoritative database build, seed, data-change, and reporting scripts.
-- `Docs/` contains proposal, ERD, normalization, API, sprint, and user/developer documentation.
+- C#
+- .NET 8 Windows Forms
+- SQL Server LocalDB or SQL Server Express
+- Microsoft.Data.SqlClient
+- TheMealDB API
 
-## Local setup
+## Project folders
 
-1. Install Visual Studio 2022 with .NET desktop development and SQL Server LocalDB/Express.
-2. Clone the GitHub repository.
-3. Open `MealWise.csproj` and restore NuGet packages.
-4. Run SQL scripts 00, 01, and 02 in order.
-5. Configure the SQL Server connection in `appsettings.json`.
-6. Build and run the WinForms project.
+- `Forms/` contains the main window and application screens.
+- `Data/` contains the database connection and recipe import code.
+- `Services/` contains the TheMealDB API service.
+- `Models/` contains the recipe data classes.
+- `Program.cs` starts the application.
+- `AppSettings.cs` reads the database connection string.
+- The SQL scripts and Markdown documents are in the project root.
 
-## Database access conventions
+## Setting up a development copy
 
-- Use `DatabaseService.CreateConnection()` to create a SQL connection.
-- Use `using` / `await using` to dispose connections, commands, readers, and transactions.
-- Parameterize values. Never concatenate user input into a SQL statement.
-- Preserve PK/FK constraints; do not use a UI-only workaround for referential integrity.
-- Update `ERD.md` and `3NF_AND_SCHEMA.md` in the same PR as any schema changes.
+1. Install Visual Studio 2022 with the .NET desktop development workload.
+2. Install .NET 8 and SQL Server LocalDB or Express.
+3. Clone the repository and open `MealWise.csproj`.
+4. Run the database scripts in order: 00, 01, and 02.
+5. Run `05_VerifyDatabase.sql` and `06_SmokeTest.sql`.
+6. Copy `appsettings.example.json` to `appsettings.json` and set the connection string, or use the `CAPSTONE_CONNECTION_STRING` environment variable.
+7. Restore packages, build, and run the project.
 
-## API conventions
+Only run `01_CreateTables.sql` on a new database. It creates the tables and is not a migration script.
 
-- Keep HTTP calls in `MealDbApiService`; do not call the API directly from every form.
-- Use cancellation tokens for future long-running or cancellable API operations.
-- Validate empty search input before making a request.
-- Treat null `meals` as no results.
-- TheMealDB V1 ingredients are numbered properties, not a JSON array; use the existing parsing loop.
-- Persist imports through `RecipeImportRepository`, which wraps parent recipe and ingredient changes in one SQL transaction.
-- Preserve provider attribution and review the provider terms before any public release.
+## Database code
 
-## SQL build order
+- Use `DatabaseService.CreateConnection()` when opening a SQL connection.
+- Dispose connections, commands, and readers when finished.
+- Use SQL parameters for values instead of adding user input directly into SQL strings.
+- Keep the primary-key and foreign-key relationships working.
+- Update the ERD and database documentation if the schema changes.
 
-1. `00_CreateDatabase.sql`
-2. `01_CreateTables.sql`
-3. `02_InsertSampleData.sql`
-4. `03_Data_Change_Examples.sql` (demonstrates insert/update/delete)
-5. `04_Complex_Select_Queries.sql` (reporting/examples)
+The sample user in the seed data uses `demo@mealwise.local`.
 
-Scripts 03 and 04 are demonstration scripts and may be run after each fresh seed. Do not run script 01 against an existing populated database.
+## API code
 
-## Pull request expectations
+- API requests are handled in `Services/MealDbApiService.cs`.
+- Check that the search field is not empty before sending a request.
+- Handle an empty API response.
+- TheMealDB ingredient fields are numbered properties in the response.
+- Recipe imports are saved through `Data/RecipeImportRepository.cs` in a SQL transaction.
 
-- One issue and one branch per feature/fix where practical.
-- Include a short summary, testing steps, and screenshots for UI changes.
-- Request review from the other student.
-- Do not commit credentials, connection passwords, build output, or local database files.
+## Ingredient measurements
+
+The API measurements are saved in `RecipeIngredients.MeasureText`. The text is kept as provided because not every measurement can be safely changed into a number and standard unit. Grocery list totals should not combine different units, such as cups and grams.
+
+## SQL scripts
+
+1. `00_CreateDatabase.sql` creates the database.
+2. `01_CreateTables.sql` creates the tables.
+3. `02_InsertSampleData.sql` adds sample data.
+4. `03_Data_Change_Examples.sql` shows insert, update, and delete examples.
+5. `04_Complex_Select_Queries.sql` has reporting queries.
+6. `05_VerifyDatabase.sql` checks the database setup.
+7. `06_SmokeTest.sql` runs database tests inside a transaction and rolls back the test data.
+
+## Working on the project
+
+Use GitHub issues to keep track of work. Make changes on a branch instead of directly on `main`. Before merging, build the project and test the changes. Update the user guide if the way a screen works changes.

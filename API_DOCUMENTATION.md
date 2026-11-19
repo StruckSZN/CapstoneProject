@@ -1,68 +1,58 @@
-# External API Documentation — TheMealDB
+# TheMealDB API
 
-## Purpose and meaningful use
+## How the app uses the API
 
-MealWise uses TheMealDB to help users discover recipes. The API is part of a real application workflow:
+MealWise uses TheMealDB to search for recipes and get their full details.
 
-1. A user searches by meal name in the **Find Recipes (API)** screen.
-2. The app displays matching recipe names and thumbnails.
-3. The user selects a result; the app requests the full recipe record.
-4. The app displays category, cuisine/area, ingredients, measures, instructions, and image.
-5. The user clicks **Save to recipe library**.
-6. MealWise saves the recipe and ingredient relationships to SQL Server in a single transaction. The saved recipe can then be scheduled in a weekly meal plan and used by the grocery-list feature.
+1. Search for a meal name in the recipe search screen.
+2. Select a result to load its full details.
+3. Review the category, cuisine, ingredients, measurements, instructions, and image.
+4. Save the recipe to the local recipe library.
+5. The app stores the recipe and its ingredients in SQL Server. The saved recipe can then be used in a meal plan and grocery list.
 
-This goes beyond displaying a static API response: API data becomes usable application data and participates in the app's core meal-planning workflow.
-
-## Provider and official documentation
+## Provider information
 
 - Provider: [TheMealDB](https://www.themealdb.com/)
 - API guide: [https://www.themealdb.com/api.php](https://www.themealdb.com/api.php)
 - Terms: [https://www.themealdb.com/terms_of_use.php](https://www.themealdb.com/terms_of_use.php)
-- Base URL used by this application: `https://www.themealdb.com/api/json/v1/1/`
-- Format: HTTPS / JSON
-- Authentication for the educational sample: shared test key `1` in the URL path
+- Base URL: `https://www.themealdb.com/api/json/v1/1/`
+- Format: HTTPS and JSON
+- The educational version uses the shared test key `1`.
 
-The provider's documentation identifies key `1` as a development/learning test key. The provider's terms restrict app-store publication under free access unless the developer has a paid supporter subscription. The team's use is for an educational capstone demonstration; re-check the terms and obtain the required access before any app-store publication.
+Check TheMealDB's current terms before distributing the application publicly. The shared key is intended for learning and development.
 
-## Endpoints used
+## Endpoints
 
-| Endpoint | Example | Use |
+| Endpoint | Example | What it returns |
 |---|---|---|
-| Search by name | `search.php?s=chicken` | Returns a list of matching meal summaries |
-| Full meal lookup | `lookup.php?i=52772` | Returns full instructions, ingredient/measure pairs, category, area, and image URL |
+| Search by name | `search.php?s=chicken` | Matching recipe summaries |
+| Full meal lookup | `lookup.php?i=52772` | Full recipe information and ingredients |
 
-## Request/response behavior
+## Data saved by MealWise
 
-- Requests use `HttpClient` over HTTPS.
-- The search term and recipe ID are URL-encoded.
-- Non-success HTTP status codes are handled as API failures.
-- A response with `meals: null` is treated as no search results.
-- The full meal response includes ingredient and measure values as numbered properties (`strIngredient1`/`strMeasure1` through index 20). `MealDbApiService` iterates those pairs and removes blank ingredient slots.
-- The app does not assume that recipe data contains nutrition facts or guaranteed allergen information.
-
-## Local database mapping
-
-| TheMealDB data | MealWise table/column |
+| API value | Database location |
 |---|---|
 | `idMeal` | `Recipes.SourceRecipeId` |
-| Constant provider name | `Recipes.SourceName` = `TheMealDB` |
+| Provider name | `Recipes.SourceName` |
 | `strMeal` | `Recipes.RecipeName` |
-| `strCategory` | `RecipeCategories.CategoryName`, referenced by `Recipes.CategoryId` |
-| `strArea` | `Cuisines.CuisineName`, referenced by `Recipes.CuisineId` |
+| `strCategory` | `RecipeCategories` |
+| `strArea` | `Cuisines` |
 | `strInstructions` | `Recipes.Instructions` |
 | `strMealThumb` | `Recipes.ImageUrl` |
 | `strSource` | `Recipes.SourceUrl` |
-| Ingredient/measure pairs | `Ingredients` and `RecipeIngredients.MeasureText` |
+| Ingredient and measure pairs | `Ingredients` and `RecipeIngredients` |
 
-The import repository creates/reuses lookup rows, inserts or updates the recipe by provider ID, replaces its ingredient bridge rows, and commits the transaction. Duplicate imports update the existing local recipe rather than creating a second copy.
+The API returns ingredient and measurement values in numbered fields, from 1 to 20. The service reads those pairs and skips blank ingredient fields.
+
+The import code checks whether the recipe was already saved using its TheMealDB ID. If it exists, the recipe is updated instead of adding another copy. The recipe and ingredient changes are saved in a database transaction.
 
 ## Error handling
 
-- Empty search terms are rejected before calling the API.
-- No search results produce an informational message.
-- API/network errors produce an error message and leave the local database unchanged.
-- Database import uses a SQL transaction; any failure rolls back the recipe and ingredient changes.
+- An empty search term is rejected.
+- If there are no results, the app shows a message.
+- Network and API errors are shown to the user.
+- If saving a recipe fails, the database transaction is rolled back.
 
-## Attribution and limitations
+## Limitations and attribution
 
-The recipe search page displays attribution to TheMealDB. Recipe data may be community-contributed. The app is not a nutrition calculator and must not present API recipes as medically or allergen safe. Users should check recipe details and ingredient labels themselves. For the capstone, the shared test key is intended for education/development; public release requires reviewing and complying with the provider's current terms.
+TheMealDB recipe information may be community-contributed. The app does not provide nutrition facts or guarantee allergen information. Users should check recipe details and ingredient labels themselves. Recipe search screens include attribution to TheMealDB.

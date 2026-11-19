@@ -1,33 +1,56 @@
-# MealWise User Guide (Initial Draft)
+# MealWise User Guide
 
-## Start the application
+## Starting the app
 
-1. Launch MealWise from Visual Studio or the built application executable.
-2. On the Dashboard, use **Test database connection** to confirm that MealPlannerDb is available.
+1. Open the project in Visual Studio or run the built application.
+2. Go to the Dashboard.
+3. Select **Test database connection** to make sure the app can connect to SQL Server.
 
-## Find and save a recipe
+## Setting up the database
+
+1. Open SQL Server Management Studio.
+2. Run `00_CreateDatabase.sql`.
+3. Select the new database and run `01_CreateTables.sql`.
+4. Run `02_InsertSampleData.sql` to add the sample data.
+5. Run `05_VerifyDatabase.sql` to check the tables and sample data.
+6. Run `06_SmokeTest.sql` to test some database operations. The test uses a transaction and rolls back the test records.
+7. Set the connection string in `appsettings.json` or use the `CAPSTONE_CONNECTION_STRING` environment variable.
+
+Do not run `01_CreateTables.sql` again after the tables have already been created.
+
+## Searching for recipes
 
 1. Open **Find Recipes (API)**.
-2. Enter a meal name (for example, chicken, pasta, or salmon) and choose **Search recipes**.
-3. Select a result to load its full recipe details.
-4. Review the recipe name, category, cuisine/area, ingredients, measures, and cooking instructions.
-5. Choose **Save to recipe library** to import it into the local database.
-6. The Recipe Library module (to be completed) will provide local browsing and editing of saved recipes.
+2. Type a recipe name, such as chicken, pasta, or salmon.
+3. Select **Search recipes**.
+4. Select a result to see the full recipe.
+5. Review the ingredients, measurements, and instructions.
+6. Select **Save to recipe library** to save it in the database.
 
-## Recipe Library, Weekly Planner, and Grocery List
+## Using the Recipe Library
 
-These modules are currently assigned for implementation. Update this guide with final screenshots and precise steps after the classmate's screens are integrated.
+The Recipe Library shows recipes saved in the database. You can search for a recipe, sort the list, add a recipe, edit a recipe, or delete one.
 
-Expected workflow:
+## Using the Weekly Meal Planner
 
-1. Review or add recipes in Recipe Library.
-2. Create a meal plan and set its week-start date.
-3. Add a saved recipe to a date and meal type, and set the number of servings.
-4. Generate a grocery list from the plan.
-5. Check off items as they are purchased.
+1. Open **Weekly Meal Planner**.
+2. Create a meal plan and choose the week.
+3. Add a saved recipe to a date and meal type.
+4. Set the number of servings.
+5. Edit or remove planned meals when needed.
 
-## Important data notes
+The app checks that meals are added to the selected week and does not allow two entries in the same meal slot.
 
-- The API content is supplied by TheMealDB; verify recipe instructions and ingredients yourself.
-- The app does not calculate nutrition values or guarantee allergy/dietary suitability.
-- Do not delete a recipe that is already used in a meal plan unless the application clearly explains how the planned entry will be handled.
+## Using the Grocery List
+
+1. Open **Grocery List**.
+2. Select a meal plan and generate its grocery list.
+3. Add or edit grocery items if needed.
+4. Remove items that are not needed.
+5. Check off items after they are purchased.
+
+## Things to keep in mind
+
+- Recipe details come from TheMealDB, so check the information before using it.
+- The app does not calculate nutrition or confirm that recipes meet allergy or dietary needs.
+- Some measurements stay in the original text format when a safe conversion is not available.

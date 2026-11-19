@@ -2,21 +2,17 @@
 
 **Target submission date: December 8, 2026**
 
-| Sprint | Dates | Goals | Exit criteria |
-|---|---|---|---|
-| Sprint 1 — Foundation | Nov 12–Nov 17 | Confirm scope, set up GitHub, finalize ERD/3NF, run schema and seed scripts, verify API search/import | Clean database setup works; API import stored locally; issues and milestones created |
-| Sprint 2 — Core modules | Nov 18–Nov 24 | Complete Recipe Library CRUD; begin Weekly Meal Planner CRUD; finish SQL query examples and API docs | Recipes can be created/read/updated/deleted; planner can add/list plan entries; core SQL queries run |
-| Sprint 3 — Grocery and integration | Nov 25–Dec 1 | Complete grocery list generation/CRUD; finish planner; integrate modules; validation and sorting | End-to-end recipe-to-plan-to-grocery workflow works; both students reviewed PRs |
-| Sprint 4 — Hardening and submission | Dec 2–Dec 8 | Regression tests, bug fixes, screenshots, user/developer guide, final reflection, presentation | All rubric requirements demonstrated; README and docs complete; final build and GitHub history ready |
+| Sprint | Dates | Planned work |
+|---|---|---|
+| Sprint 1 — Foundation | Nov 12–Nov 17 | Set up GitHub, work on the ERD and database tables, add sample data, and connect recipe search/import |
+| Sprint 2 — Main screens | Nov 18–Nov 24 | Work on the Recipe Library and Weekly Meal Planner, and finish SQL examples and API notes |
+| Sprint 3 — Grocery list | Nov 25–Dec 1 | Finish the Grocery List, connect the screens, and test the main workflows |
+| Sprint 4 — Final work | Dec 2–Dec 8 | Fix remaining problems, take screenshots, finish the guides, and prepare the presentation and reflections |
 
-## Weekly team cadence
+## Team check-ins
 
-- Hold at least one short meeting each week.
-- Update GitHub issue status after every work session.
-- At each meeting, record completed work, next tasks, blockers, and decisions in `MEETING_NOTES_TEMPLATE.md`.
-- Do not merge unreviewed pull requests to `main`.
-- Reserve Dec 6–7 for final end-to-end testing and documentation corrections; avoid adding new scope after Dec 5.
+The plan was to check in during the project, update GitHub issues, and keep track of work that still needed to be done. Any meeting notes should record what was actually discussed rather than being filled in after the fact.
 
-## Definition of a completed issue
+## When a task is finished
 
-A task is done only when code is committed to its feature branch, the feature has been tested, documentation is updated where needed, a pull request has been reviewed and merged, and the associated GitHub issue is closed.
+A task should be tested before it is marked complete. If a change affects the way the app works, update the instructions too. Pull requests should be reviewed before they are merged.

@@ -1,6 +1,6 @@
 # MealWise Database Schema — Data Dictionary
 
-The SQL Server database is named `MealPlannerDb`. The build script in `Sql/01_CreateTables.sql` is the source of truth; this document describes the columns and relationships for review and grading.
+The SQL Server database is named `MealPlannerDb`. The table definitions are in `01_CreateTables.sql`. This document describes the columns and relationships.
 
 ## AppUsers
 | Column | Type | Key / rules | Meaning |

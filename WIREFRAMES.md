@@ -1,6 +1,6 @@
 # MealWise Wireframes
 
-These are low-fidelity screen plans. The implementation may refine spacing and styling while preserving the required workflow.
+These are early screen plans for the main parts of the app. The finished screens may look a little different.
 
 ## 1. Dashboard
 
@@ -36,7 +36,7 @@ These are low-fidelity screen plans. The implementation may refine spacing and s
 +---------------------------------------------------------------+
 ```
 
-## 3. Recipe Library — classmate module
+## 3. Recipe Library
 
 - Search box and sort selector (name, category, cuisine, date added).
 - Data grid with recipe name, category, cuisine, and favorite status.

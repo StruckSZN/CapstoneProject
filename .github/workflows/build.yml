@@ -1,0 +1,23 @@
+name: Build MealWise
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore packages
+        run: dotnet restore MealWise.csproj
+      - name: Build Release
+        run: dotnet build MealWise.csproj --configuration Release --no-restore
