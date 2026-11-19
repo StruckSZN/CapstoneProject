@@ -8,16 +8,15 @@
 - Microsoft.Data.SqlClient
 - TheMealDB API
 
-## Project files
+## Project folders
 
-The source files are currently kept in the main project folder.
-
-- Main window and screens: `MainForm.cs`, `DashboardControl.cs`, and the other control files
-- Database code: `DatabaseService.cs` and `RecipeImportRepository.cs`
-- API code: `MealDbApiService.cs`
-- API data classes: `ExternalMealDetails.cs` and `ExternalMealSummary.cs`
-- SQL scripts: `00_CreateDatabase.sql` through `06_SmokeTest.sql`
-- Documentation: the Markdown files in the project folder
+- `Forms/` contains the main window and application screens.
+- `Data/` contains the database connection and recipe import code.
+- `Services/` contains the TheMealDB API service.
+- `Models/` contains the recipe data classes.
+- `Program.cs` starts the application.
+- `AppSettings.cs` reads the database connection string.
+- The SQL scripts and Markdown documents are in the project root.
 
 ## Setting up a development copy
 
@@ -26,7 +25,7 @@ The source files are currently kept in the main project folder.
 3. Clone the repository and open `MealWise.csproj`.
 4. Run the database scripts in order: 00, 01, and 02.
 5. Run `05_VerifyDatabase.sql` and `06_SmokeTest.sql`.
-6. Set the connection string in `appsettings.json`, or use the `CAPSTONE_CONNECTION_STRING` environment variable.
+6. Copy `appsettings.example.json` to `appsettings.json` and set the connection string, or use the `CAPSTONE_CONNECTION_STRING` environment variable.
 7. Restore packages, build, and run the project.
 
 Only run `01_CreateTables.sql` on a new database. It creates the tables and is not a migration script.
@@ -43,11 +42,11 @@ The sample user in the seed data uses `demo@mealwise.local`.
 
 ## API code
 
-- API requests are handled in `MealDbApiService`.
+- API requests are handled in `Services/MealDbApiService.cs`.
 - Check that the search field is not empty before sending a request.
 - Handle an empty API response.
 - TheMealDB ingredient fields are numbered properties in the response.
-- Recipe imports are saved through `RecipeImportRepository` in a SQL transaction.
+- Recipe imports are saved through `Data/RecipeImportRepository.cs` in a SQL transaction.
 
 ## Ingredient measurements
 
