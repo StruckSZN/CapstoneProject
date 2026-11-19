@@ -5,6 +5,7 @@
 *.suo
 
 # Local credentials or machine-specific settings
+appsettings.json
 appsettings.local.json
 secrets.json
 .env
