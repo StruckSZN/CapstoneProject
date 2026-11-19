@@ -1,6 +1,6 @@
 # MealWise Entity Relationship Diagram
 
-The schema contains **15 tables**, exceeding the minimum requirement of eight.
+The database schema contains 15 tables.
 
 ```mermaid
 erDiagram
@@ -123,4 +123,4 @@ erDiagram
 
 ## ERD maintenance
 
-When the schema changes, update the SQL table scripts and this diagram in the same pull request. The diagram must match the actual primary and foreign keys in `Sql/01_CreateTables.sql`.
+When the schema changes, update the SQL table scripts and this diagram in the same pull request. The diagram must match the actual primary and foreign keys in `01_CreateTables.sql`.
